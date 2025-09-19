@@ -26,9 +26,47 @@ export default class Tablero {
         this.actualizarFecha();
         this.obtenerVuelos();
 
-        // Configura una actualización automática.
+        // refresco automático
         this.#intervaloID = setInterval(() => this.obtenerVuelos(), 60000);
+
+        // --- búsqueda ---
+        const formBusqueda = document.querySelector("#form-busqueda");
+        const inputBusqueda = document.querySelector("#input-busqueda");
+        const btnLimpiar = document.querySelector("#btn-limpiar-busqueda");
+
+        if (formBusqueda && inputBusqueda) {
+            formBusqueda.addEventListener("submit", (e) => {
+                e.preventDefault(); // 🚨 evita recarga
+                this.buscarPorCodigo(inputBusqueda.value.trim());
+            });
+        }
+
+        if (btnLimpiar) {
+            btnLimpiar.addEventListener("click", (e) => {
+                e.preventDefault();
+                this.renderizarVuelos(this.#vuelos);
+            });
+        }
     }
+
+    buscarPorCodigo(codigo) {
+        if (!codigo) {
+            this.renderizarVuelos(this.#vuelos);
+            return;
+        }
+
+        const filtrados = this.#vuelos.filter(v =>
+            v.codigo.toUpperCase().includes(codigo.toUpperCase())
+        );
+
+        if (filtrados.length > 0) {
+            this.renderizarVuelos(filtrados);
+        } else {
+            this.mostrarError(`No se encontraron vuelos con código ${codigo}`);
+        }
+    }
+
+
 
     // para obtener vuelos de forma asincrona 
     async obtenerVuelos() {
