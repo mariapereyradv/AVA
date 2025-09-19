@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AVA - Atrévete a Volar Alto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/app.js" type="module" defer></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+  <!-- VISTA 1: PORTADA -->
+  <main id="portada" class="flex flex-col items-center justify-center h-screen bg-cover bg-center" style="background-image: url('./assets/img/background.jpg');">
+    <div class="text-center bg-black bg-opacity-50 p-10 rounded-lg">
+      <h1 class="text-8xl font-bold text-cyan-400 drop-shadow-lg">AVA</h1>
+      <p class="text-2xl mt-4 text-gray-200">Atrévete a Volar Alto</p>
+      <button id="btn-ver-vuelos" class="mt-8 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-4 px-8 rounded-full text-xl transition-transform transform hover:scale-110">
+        Ver Vuelos
+      </button>
+    </div>
+  </main>
+
+  <!-- VISTA 2: TABLERO DE VUELOS (Oculta al inicio) -->
+  <main id="vista-vuelos" class="hidden container mx-auto p-4">
+    <!-- header -->
+    <header class="text-center my-8">
+      <h1 class="text-4xl font-bold text-cyan-400">✈️ Tablero de Vuelos</h1>
+      <p id="fecha-actual" class="text-gray-400 mt-2"></p>
+    </header>
+
+    <!-- Filtro de búsqueda-->
+    <form id="form-busqueda" class="mb-8 flex justify-center items-center gap-4">
+      <input 
+        type="text" 
+        id="input-busqueda" 
+        placeholder="Buscar por código (ej: LA249)" 
+        class="w-full md:w-1/3 bg-gray-800 border border-gray-700 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+      >
+      <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg">
+        Buscar
+      </button>
+      <button type="button" id="btn-limpiar-busqueda" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg">
+        Mostrar Todos
+      </button>
+    </form>
+
+    <!-- Contenedor donde la clase Tablero renderizará la tabla dinámicamente-->
+    <div id="tablero-vuelos" class="bg-gray-800 p-6 rounded-lg shadow-lg">
+      <!-- La tabla generada con document.createElement() irá aquí -->
+    </div>
+
+    <footer class="text-center text-gray-500 mt-12">
+      <p>&copy; 2025 AVA Aerolíneas. María Pereyra. Todos los derechos reservados.</p>
+    </footer>
+  </main>
+
+</body>
+</html>
