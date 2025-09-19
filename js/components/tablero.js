@@ -8,12 +8,16 @@ export default class Tablero {
     #intervaloID;
 
     constructor() {
-        //elementos del DOM
-        this.#contenedor = document.querySelector("#vuelos-contenedor");
+        // elementos del DOM
+        this.#contenedor = document.querySelector("#tablero-vuelos");
         this.#fechaContenedor = document.querySelector("#fecha-actual");
 
         if (!this.#contenedor || !this.#fechaContenedor) {
             console.error("No se encontraron los elementos necesarios para el tablero.");
+            // mas cuidados ante roturas
+            this.#contenedor = this.#contenedor || document.createElement('div');
+            if (!this.#contenedor.id) this.#contenedor.id = 'tablero-vuelos-fallback';
+            this.#contenedor.classList.add('bg-gray-800', 'p-6', 'rounded-lg', 'shadow-lg');
         }
     }
 
@@ -30,7 +34,7 @@ export default class Tablero {
     async obtenerVuelos() {
         console.log("Actualizando vuelos...");
         try {
-            const respuesta = await fetch('vuelos.json');
+            const respuesta = await fetch('./vuelos.json');
 
             if (!respuesta.ok) {
                 throw new Error(`Error HTTP: ${respuesta.status}`);
@@ -49,13 +53,13 @@ export default class Tablero {
 
     // mostrar vuelos
     renderizarVuelos(vuelos) {
-        // limpia el contenido anterior cuando se actualiza
-        this.#contenedor.innerHTML = '';
-
-        if (vuelos.length === 0) {
-            this.mostrarError("No hay vuelos para mostrar.");
+        // si por alguna razón #contenedor no está disponible, evitamos lanzar excepción
+        if (!this.#contenedor) {
+            console.error("Contenedor de vuelos no disponible. Abortando renderizado.");
             return;
         }
+        // limpia el contenido anterior cuando se actualiza
+        this.#contenedor.innerHTML = '';
 
         // creo la tabla y sus componentes dinámicamente con createElement().
         const tabla = document.createElement('table');
@@ -104,8 +108,13 @@ export default class Tablero {
 
     // metodo auxiliar para mostrar errores en la interfaz
     mostrarError(mensaje) {
+        if (!this.#contenedor) {
+            console.error("No se puede mostrar error en UI porque el contenedor no existe:", mensaje);
+            return;
+        }
         this.#contenedor.innerHTML = `<p class="text-center text-red-500 bg-red-900 bg-opacity-30 p-4 rounded-lg">${mensaje}</p>`;
     }
+
 
     // metodo auxiliar para actualizar la fecha
     actualizarFecha() {
